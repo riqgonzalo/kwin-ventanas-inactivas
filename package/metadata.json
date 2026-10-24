@@ -1,0 +1,25 @@
+{
+    "KPackageStructure": "KWin/Effect",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "riqgonzalo@gmail.com",
+                "Name": "Gonzalo Riquelme"
+            }
+        ],
+        "Category": "Appearance",
+        "Description": "Hace transparentes y oscurece solo las ventanas no seleccionadas, sin confundirse con paneles, menús o ventanas ocultas",
+        "Description[en]": "Makes only unfocused windows translucent and dimmed, without getting confused by panels, menus or hidden windows",
+        "EnabledByDefault": false,
+        "Icon": "preferences-system-windows-effect-translucency",
+        "Id": "ventanas-inactivas",
+        "License": "GPL-3.0-or-later",
+        "Name": "Ventanas inactivas",
+        "Name[en]": "Inactive Windows",
+        "Version": "1.0.0",
+        "Website": "https://github.com/riqgonzalo/kwin-ventanas-inactivas"
+    },
+    "X-KDE-ConfigModule": "kcm_kwin4_genericscripted",
+    "X-KDE-Ordering": 50,
+    "X-Plasma-API": "javascript"
+}

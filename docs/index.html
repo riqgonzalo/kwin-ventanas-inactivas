@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ventanas inactivas · efecto para KDE Plasma</title>
+<meta name="description" content="Efecto de KWin para KDE Plasma 6: transparenta y oscurece solo las ventanas no seleccionadas, sin confundirse con paneles, menús o ventanas ocultas.">
+<style>
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --text: #1b1e24; --muted: #5b6270;
+  --border: #dde1e7; --accent: #1d99f3; --accent-ink: #ffffff;
+  --code-bg: #12151b; --code-text: #e6e9ef; --ok: #27ae60;
+  --wall-a: #3d7d5a; --wall-b: #2a5a8a;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111318; --surface: #1a1d24; --text: #e6e9ef; --muted: #9aa3b2;
+    --border: #2a2f3a; --accent: #3daee9; --accent-ink: #0b1016;
+    --code-bg: #0b0d11; --code-text: #e6e9ef; --ok: #2ecc71;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", "Noto Sans", Ubuntu, sans-serif;
+}
+main { max-width: 860px; margin: 0 auto; padding: 0 16px 64px; }
+a { color: var(--accent); }
+header.hero { padding: 56px 0 32px; }
+.tag { display: inline-block; font-size: 13px; color: var(--muted); border: 1px solid var(--border); border-radius: 99px; padding: 2px 10px; margin-bottom: 14px; }
+h1 { font-size: clamp(32px, 6vw, 48px); line-height: 1.1; margin: 0 0 14px; letter-spacing: -0.02em; }
+.lead { font-size: 19px; color: var(--muted); margin: 0 0 24px; max-width: 640px; }
+.buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px; font-weight: 600; text-decoration: none; border: 1px solid var(--border); color: var(--text); background: var(--surface); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+h2 { font-size: 24px; margin: 48px 0 12px; letter-spacing: -0.01em; }
+p { margin: 0 0 14px; }
+
+/* Demostración */
+.demo { position: relative; height: 300px; border-radius: 14px; overflow: hidden; margin: 8px 0 0;
+  background: radial-gradient(circle at 20% 30%, #6fbf73 0, transparent 45%), radial-gradient(circle at 80% 70%, #4f8fd1 0, transparent 50%), linear-gradient(135deg, var(--wall-a), var(--wall-b));
+  border: 1px solid var(--border); }
+.win { position: absolute; border-radius: 10px; background: #23262e; color: #e6e9ef; box-shadow: 0 12px 30px rgba(0,0,0,.35); overflow: hidden; transition: opacity .25s, filter .25s; cursor: pointer; }
+.win .bar { height: 28px; background: #2d313b; display: flex; align-items: center; gap: 6px; padding: 0 10px; font-size: 12px; }
+.win .dot { width: 9px; height: 9px; border-radius: 50%; background: #5b6270; }
+.win .body { padding: 12px; font-size: 12px; line-height: 1.7; color: #b8c0cc; }
+.win .line { height: 8px; border-radius: 4px; background: #3a3f4b; margin: 8px 0; }
+.win.inactive { opacity: .4; filter: brightness(.6); }
+.w1 { left: 4%; top: 12%; width: 46%; height: 70%; }
+.w2 { left: 30%; top: 22%; width: 44%; height: 64%; }
+.w3 { left: 56%; top: 8%; width: 40%; height: 60%; }
+.panel { position: absolute; left: 0; right: 0; bottom: 0; height: 30px; background: rgba(20,22,28,.85); display: flex; align-items: center; gap: 8px; padding: 0 10px; }
+.panel span { width: 18px; height: 18px; border-radius: 4px; background: #4a505d; }
+.hint { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+.code { position: relative; background: var(--code-bg); color: var(--code-text); border-radius: 10px; padding: 14px 16px; margin: 0 0 14px; overflow-x: auto; }
+.code pre { margin: 0; font: 14px/1.6 ui-monospace, "JetBrains Mono", "Fira Code", monospace; white-space: pre; }
+.copy { position: absolute; top: 8px; right: 8px; font: 600 12px system-ui, sans-serif; color: var(--code-text); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+.copy.done { color: var(--ok); border-color: var(--ok); }
+code { font-family: ui-monospace, "JetBrains Mono", monospace; font-size: .92em; background: var(--surface); border: 1px solid var(--border); border-radius: 5px; padding: 1px 5px; }
+
+table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 15px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+tr:last-child td { border-bottom: 0; }
+th { color: var(--muted); font-weight: 600; }
+ol { padding-left: 22px; } li { margin-bottom: 6px; }
+footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
+@media (max-width: 560px) { .demo { height: 240px; } .win .body { display: none; } }
+</style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <span class="tag">Efecto de KWin · KDE Plasma 6</span>
+    <h1>Ventanas inactivas</h1>
+    <p class="lead">Hace transparentes y más oscuras solo las ventanas que no tienes seleccionadas. La ventana en la que trabajas queda siempre sólida.</p>
+    <div class="buttons">
+      <a class="btn primary" href="#instalar">Instalar</a>
+      <a class="btn" href="https://github.com/riqgonzalo/kwin-ventanas-inactivas">Ver en GitHub</a>
+    </div>
+  </header>
+
+  <div class="demo" id="demo" aria-label="Demostración: haz clic en una ventana para seleccionarla">
+    <div class="win w1 inactive"><div class="bar"><i class="dot"></i>Archivos</div><div class="body"><div class="line"></div><div class="line" style="width:70%"></div><div class="line" style="width:85%"></div></div></div>
+    <div class="win w2 inactive"><div class="bar"><i class="dot"></i>Navegador</div><div class="body"><div class="line"></div><div class="line" style="width:60%"></div><div class="line" style="width:90%"></div><div class="line" style="width:40%"></div></div></div>
+    <div class="win w3"><div class="bar"><i class="dot"></i>Terminal</div><div class="body">~ $ ./install.sh<br>Listo.</div></div>
+    <div class="panel"><span></span><span></span><span></span></div>
+  </div>
+  <p class="hint">Haz clic en una ventana de la demostración para seleccionarla.</p>
+
+  <h2>¿Por qué no usar los efectos de KDE?</h2>
+  <p>Con <em>Translucidez</em> y <em>Oscurecer inactivas</em>, la ventana seleccionada a veces se vuelve transparente u oscura. Pasa porque KDE da el foco por un momento a ventanas que no ves: la pasarela de grabación de pantalla, un panel, un menú o una notificación. Esos efectos creen entonces que tu ventana está inactiva.</p>
+  <div class="grid">
+    <div class="card"><h3>No se confunde</h3><p>Ignora paneles, menús, notificaciones, el escritorio y las ventanas ocultas.</p></div>
+    <div class="card"><h3>Diálogos sólidos</h3><p>Los diálogos de la ventana seleccionada, y su ventana dueña, se ven sólidos.</p></div>
+    <div class="card"><h3>Siempre correcto</h3><p>Recalcula todas las ventanas desde cero en cada cambio.</p></div>
+    <div class="card"><h3>Todo en uno</h3><p>Transparencia y oscurecido ajustables en un solo efecto, sin permisos de administrador.</p></div>
+  </div>
+
+  <h2 id="instalar">Instalación</h2>
+  <p>Abre una terminal y ejecuta:</p>
+  <div class="code"><button class="copy">Copiar</button><pre>git clone https://github.com/riqgonzalo/kwin-ventanas-inactivas.git
+cd kwin-ventanas-inactivas
+./install.sh</pre></div>
+  <p>El instalador:</p>
+  <ol>
+    <li>Copia el efecto a <code>~/.local/share/kwin-wayland/effects/</code>.</li>
+    <li>Lo activa y lo carga al momento, sin cerrar sesión.</li>
+    <li>Desactiva <em>Oscurecer inactivas</em> y la opción de ventanas inactivas de <em>Translucidez</em> para que no se dupliquen.</li>
+  </ol>
+  <p>Funciona también en sistemas inmutables como Fedora Kinoite, Bazzite o Aurora.</p>
+
+  <h2>Configuración</h2>
+  <p>En <strong>Preferencias del sistema → Efectos del escritorio → Ventanas inactivas</strong>, pulsa el botón de configurar.</p>
+  <table>
+    <tr><th>Opción</th><th>Por defecto</th><th>Qué hace</th></tr>
+    <tr><td>Opacidad de las inactivas</td><td>40 %</td><td>100 % = sin transparencia</td></tr>
+    <tr><td>Oscurecer las inactivas</td><td>40 %</td><td>0 % = sin oscurecer</td></tr>
+  </table>
+  <p style="margin-top:14px">O desde la terminal:</p>
+  <div class="code"><button class="copy">Copiar</button><pre>kwriteconfig6 --file kwinrc --group Effect-ventanas-inactivas --key Inactive 60
+kwriteconfig6 --file kwinrc --group Effect-ventanas-inactivas --key Dim 25
+dbus-send --session --dest=org.kde.KWin /Effects org.kde.kwin.Effects.reconfigureEffect string:ventanas-inactivas</pre></div>
+
+  <h2>Actualizar</h2>
+  <div class="code"><button class="copy">Copiar</button><pre>cd kwin-ventanas-inactivas
+git pull
+./install.sh</pre></div>
+
+  <h2>Desinstalar</h2>
+  <div class="code"><button class="copy">Copiar</button><pre>cd kwin-ventanas-inactivas
+./uninstall.sh</pre></div>
+
+  <h2>Efecto cristal</h2>
+  <p>Este efecto solo hace transparencia y oscurecido. Para que el fondo se vea desenfocado detrás de las ventanas, combínalo con <a href="https://github.com/xarblu/kwin-effects-better-blur-dx">Better Blur DX</a> y activa en él el desenfoque de todas las ventanas.</p>
+
+  <h2>Compatibilidad</h2>
+  <p>KDE Plasma 6. Probado en Plasma 6.7.5 con Wayland (Fedora 44 Kinoite). Debería funcionar en X11, pero no está probado.</p>
+
+  <footer>
+    Hecho por Gonzalo Riquelme · Licencia <a href="https://github.com/riqgonzalo/kwin-ventanas-inactivas/blob/main/LICENSE">GPL-3.0-or-later</a> · <a href="https://github.com/riqgonzalo/kwin-ventanas-inactivas/issues">Informar de un problema</a>
+  </footer>
+</main>
+<script>
+document.querySelectorAll('#demo .win').forEach(function (w) {
+  w.addEventListener('click', function () {
+    document.querySelectorAll('#demo .win').forEach(function (o) { o.classList.toggle('inactive', o !== w); });
+    w.parentNode.insertBefore(w, document.querySelector('#demo .panel'));
+  });
+});
+document.querySelectorAll('.copy').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var text = b.parentNode.querySelector('pre').innerText;
+    var done = function () { b.textContent = 'Copiado'; b.classList.add('done'); setTimeout(function () { b.textContent = 'Copiar'; b.classList.remove('done'); }, 1500); };
+    if (navigator.clipboard) { navigator.clipboard.writeText(text).then(done, function () {}); }
+  });
+});
+</script>
+</body>
+</html>

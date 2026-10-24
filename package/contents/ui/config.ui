@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>VentanasInactivasConfig</class>
+ <widget class="QWidget" name="VentanasInactivasConfig">
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0"><widget class="QLabel" name="l1"><property name="text"><string>Opacidad de las inactivas (%):</string></property></widget></item>
+   <item row="0" column="1"><widget class="QSpinBox" name="kcfg_Inactive"><property name="minimum"><number>10</number></property><property name="maximum"><number>100</number></property></widget></item>
+   <item row="1" column="0"><widget class="QLabel" name="l2"><property name="text"><string>Oscurecer las inactivas (%):</string></property></widget></item>
+   <item row="1" column="1"><widget class="QSpinBox" name="kcfg_Dim"><property name="minimum"><number>0</number></property><property name="maximum"><number>90</number></property></widget></item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
