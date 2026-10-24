@@ -14,8 +14,9 @@ o una notificación. Esos efectos creen entonces que tu ventana está inactiva.
 
 **Ventanas inactivas** lo evita así:
 
-- Ignora paneles, menús, notificaciones, el escritorio y las ventanas ocultas. Si el foco
-  pasa a una de ellas, tu última ventana seleccionada sigue sólida.
+- Ignora paneles, menús, notificaciones, el escritorio y las ventanas auxiliares invisibles
+  (opacidad 0 o de tamaño mínimo). Si el foco pasa a una de ellas, tu última ventana
+  seleccionada sigue sólida.
 - Los diálogos de la ventana seleccionada, y la ventana dueña de un diálogo, también se ven sólidos.
 - Las ventanas a pantalla completa nunca se tocan.
 - Cada vez que cambias de ventana recalcula todas desde cero, así que nunca se queda en un estado equivocado.
@@ -31,10 +32,11 @@ cd kwin-ventanas-inactivas
 
 El instalador:
 
-1. Copia el efecto a `~/.local/share/kwin-wayland/effects/` (y a las carpetas `kwin-x11` y `kwin` para otras versiones de Plasma).
-2. Lo activa.
-3. Desactiva *Oscurecer inactivas* y la opción de ventanas inactivas de *Translucidez* para que no se dupliquen.
-4. Lo carga al momento, sin cerrar sesión.
+1. Comprueba que tienes KDE Plasma 6.
+2. Copia el efecto a la carpeta correcta para tu versión (`~/.local/share/kwin-wayland/effects/` y `kwin-x11` en Plasma 6.4 o superior, `kwin` en versiones anteriores).
+3. Guarda una copia de tu configuración en `~/.config/kwinrc.antes-de-ventanas-inactivas`.
+4. Desactiva *Oscurecer inactivas* y la opción de ventanas inactivas de *Translucidez* para que no se dupliquen. Recuerda cómo los tenías.
+5. Activa el efecto y lo carga al momento, sin cerrar sesión.
 
 No necesita permisos de administrador. Funciona también en sistemas inmutables
 (Fedora Kinoite, Bazzite, Aurora, etc.).
@@ -71,6 +73,8 @@ cd kwin-ventanas-inactivas
 ./uninstall.sh
 ```
 
+Devuelve *Oscurecer inactivas* y *Translucidez* a como los tenías antes de instalar.
+
 ## Desenfoque detrás de las ventanas
 
 Este efecto solo hace transparencia y oscurecido. Para el aspecto de cristal esmerilado,
@@ -81,6 +85,11 @@ y activa en él el desenfoque de todas las ventanas.
 
 - KDE Plasma 6, probado en Plasma 6.7.5 con Wayland (Fedora 44 Kinoite).
 - Debería funcionar en X11, pero no está probado.
+
+## Cambios
+
+- **1.1.0**: ya no ignora las ventanas que no salen en la barra de tareas (Yakuake, etc.), solo las invisibles. El instalador comprueba la versión de Plasma, copia el efecto solo a la carpeta correcta y guarda una copia de seguridad. El desinstalador devuelve tus ajustes anteriores.
+- **1.0.0**: primera versión.
 
 ## Licencia
 

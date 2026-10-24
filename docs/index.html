@@ -77,7 +77,7 @@ footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--border
 <body>
 <main>
   <header class="hero">
-    <span class="tag">Efecto de KWin · KDE Plasma 6</span>
+    <span class="tag">Efecto de KWin · KDE Plasma 6 · versión 1.1</span>
     <h1>Ventanas inactivas</h1>
     <p class="lead">Hace transparentes y más oscuras solo las ventanas que no tienes seleccionadas. La ventana en la que trabajas queda siempre sólida.</p>
     <div class="buttons">
@@ -97,7 +97,7 @@ footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--border
   <h2>¿Por qué no usar los efectos de KDE?</h2>
   <p>Con <em>Translucidez</em> y <em>Oscurecer inactivas</em>, la ventana seleccionada a veces se vuelve transparente u oscura. Pasa porque KDE da el foco por un momento a ventanas que no ves: la pasarela de grabación de pantalla, un panel, un menú o una notificación. Esos efectos creen entonces que tu ventana está inactiva.</p>
   <div class="grid">
-    <div class="card"><h3>No se confunde</h3><p>Ignora paneles, menús, notificaciones, el escritorio y las ventanas ocultas.</p></div>
+    <div class="card"><h3>No se confunde</h3><p>Ignora paneles, menús, notificaciones, el escritorio y las ventanas auxiliares invisibles.</p></div>
     <div class="card"><h3>Diálogos sólidos</h3><p>Los diálogos de la ventana seleccionada, y su ventana dueña, se ven sólidos.</p></div>
     <div class="card"><h3>Siempre correcto</h3><p>Recalcula todas las ventanas desde cero en cada cambio.</p></div>
     <div class="card"><h3>Todo en uno</h3><p>Transparencia y oscurecido ajustables en un solo efecto, sin permisos de administrador.</p></div>
@@ -110,9 +110,10 @@ cd kwin-ventanas-inactivas
 ./install.sh</pre></div>
   <p>El instalador:</p>
   <ol>
-    <li>Copia el efecto a <code>~/.local/share/kwin-wayland/effects/</code>.</li>
-    <li>Lo activa y lo carga al momento, sin cerrar sesión.</li>
-    <li>Desactiva <em>Oscurecer inactivas</em> y la opción de ventanas inactivas de <em>Translucidez</em> para que no se dupliquen.</li>
+    <li>Comprueba que tienes KDE Plasma 6 y copia el efecto a la carpeta correcta para tu versión.</li>
+    <li>Guarda una copia de tu configuración en <code>~/.config/kwinrc.antes-de-ventanas-inactivas</code>.</li>
+    <li>Desactiva <em>Oscurecer inactivas</em> y la opción de ventanas inactivas de <em>Translucidez</em> para que no se dupliquen, y recuerda cómo los tenías.</li>
+    <li>Activa el efecto y lo carga al momento, sin cerrar sesión.</li>
   </ol>
   <p>Funciona también en sistemas inmutables como Fedora Kinoite, Bazzite o Aurora.</p>
 
@@ -136,6 +137,7 @@ git pull
   <h2>Desinstalar</h2>
   <div class="code"><button class="copy">Copiar</button><pre>cd kwin-ventanas-inactivas
 ./uninstall.sh</pre></div>
+  <p>Devuelve <em>Oscurecer inactivas</em> y <em>Translucidez</em> a como los tenías antes de instalar.</p>
 
   <h2>Efecto cristal</h2>
   <p>Este efecto solo hace transparencia y oscurecido. Para que el fondo se vea desenfocado detrás de las ventanas, combínalo con <a href="https://github.com/xarblu/kwin-effects-better-blur-dx">Better Blur DX</a> y activa en él el desenfoque de todas las ventanas.</p>

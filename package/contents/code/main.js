@@ -25,13 +25,21 @@ var vi = {
         vi.refresh(true);
     },
 
+    // Ventanas auxiliares invisibles (p. ej. la pasarela de grabación de
+    // pantalla): no se ven, pero a veces reciben el foco.
+    isHelperWindow: function (w) {
+        return w.opacity === 0 || w.width <= 2 || w.height <= 2 ||
+            w.lockScreen === true || w.inputMethod === true || w.outline === true ||
+            String(w.windowClass).indexOf("xwaylandvideobridge") !== -1;
+    },
+
     // Ventanas que el usuario selecciona de verdad.
     isUserWindow: function (w) {
         return !!w && w.deleted !== true && w.managed !== false &&
             (w.normalWindow === true || w.dialog === true) &&
-            w.skipTaskbar !== true && w.desktopWindow !== true &&
-            w.dock !== true && w.popupWindow !== true && w.splash !== true &&
-            String(w.windowClass).indexOf("xwaylandvideobridge") === -1;
+            w.desktopWindow !== true && w.dock !== true &&
+            w.popupWindow !== true && w.splash !== true &&
+            !vi.isHelperWindow(w);
     },
 
     mains: function (w) {
