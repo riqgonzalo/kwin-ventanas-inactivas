@@ -1,0 +1,41 @@
+name: "✅/❌ ¿Te funciona? · Does it work for you?"
+description: "Cuenta si te funcionó · Tell us whether it worked"
+title: "[Reporte] "
+labels: ["reporte"]
+body:
+  - type: dropdown
+    id: resultado
+    attributes:
+      label: "Resultado · Result"
+      options:
+        - "✅ Funciona todo · Everything works"
+        - "🟡 Funciona en parte · Partially works"
+        - "❌ No funciona · Doesn't work"
+    validations:
+      required: true
+  - type: input
+    id: entorno
+    attributes:
+      label: "Distro y versión de Plasma · Distro and Plasma version"
+      placeholder: "Fedora 44 Kinoite, Plasma 6.7.5"
+    validations:
+      required: true
+  - type: input
+    id: extra
+    attributes:
+      label: "GPU"
+      placeholder: "Intel / AMD / NVIDIA"
+  - type: checkboxes
+    id: partes
+    attributes:
+      label: "¿Qué funciona? · What works?"
+      options:
+        - label: "Wayland"
+        - label: "X11"
+        - label: "Ventana activa siempre sólida · Focused window always solid"
+        - label: "Configuración · Settings"
+  - type: textarea
+    id: detalles
+    attributes:
+      label: "Detalles / errores · Details / errors"
+      render: text

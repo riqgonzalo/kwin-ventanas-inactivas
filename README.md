@@ -1,5 +1,9 @@
 # Ventanas inactivas — efecto para KWin (KDE Plasma 6)
 
+🇪🇸 Español · [🇬🇧 English](README.en.md)
+
+**🙏 ¿Lo usas? Cuéntanos tu configuración [aquí](https://github.com/riqgonzalo/kwin-ventanas-inactivas/issues/new?template=reporte.yml).**
+
 Hace **transparentes y más oscuras solo las ventanas que no tienes seleccionadas**.
 La ventana en la que trabajas queda siempre sólida.
 
